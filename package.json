@@ -1,0 +1,21 @@
+{
+  "name": "service-router",
+  "version": "0.0.0",
+  "description": "",
+  "main": "marathon-monitor.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sebastian Seilund <sebsei@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "babel": "^5.8.23",
+    "es6-promisify": "^3.0.0",
+    "handlebars": "^4.0.2",
+    "request": "^2.61.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^4.1.1",
+    "eslint": "^1.4.1"
+  }
+}

@@ -28,8 +28,8 @@ frontend {{serviceId}}-incoming
 # Backends for all services
 
 {{#each services}}
-backend {{serviceId}}{{#each tasks}}
-  balance roundrobin
+backend {{serviceId}}
+  balance roundrobin{{#each tasks}}
   server {{taskId}} {{host}}:{{port}}{{/each}}
 
 {{/each}}

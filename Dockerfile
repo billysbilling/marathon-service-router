@@ -78,11 +78,11 @@ RUN npm install --production
 COPY . /srv/marathon-service-router
 
 COPY templates/haproxy.cfg.hbs /haproxy.cfg.hbs
-RUN mkdir -p /etc/haproxy
+COPY templates/initial.cfg /etc/haproxy.cfg
 
 EXPOSE 80
 
 ENV HAPROXY_TEMPLATE_PATH="/haproxy.cfg.hbs"
-ENV HAPROXY_CONFIG_PATH="/etc/haproxy/haproxy.cfg"
+ENV HAPROXY_CONFIG_PATH="/etc/haproxy.cfg"
 
 CMD ["/srv/marathon-service-router/run.sh"]

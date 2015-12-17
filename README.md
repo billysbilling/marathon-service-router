@@ -4,17 +4,17 @@ A Marathon app that can be run by Marathon and route to other Marathon apps usin
 
 TODO:
 
-- Add to orca so I can live test it
-- Update babel and compile in Dockerfile
-- Change usage to be to inherit from this Dockerfile
-- Add tests of marathon-monotor
+- Respect health checks
+- Does Marathon use paging?
+- Add tests of marathon-monitor
 - Add examples folder with an API gateway example
+- Tests of src/
 - Finish readme
 
 
-## Differences from Marathon's service-router.py
+## Alternatives (service-router.py, marathon-haproxy-bridge)
 
-Own template
+Own template. Use HAProxy language, and not a limited custom DSL.
 
 
 ## Usage of the standard template

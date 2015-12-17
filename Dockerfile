@@ -25,9 +25,10 @@ RUN npm install -g pangyp\
  && npm cache clear\
  && node-gyp configure || echo ""
 
-ENV NODE_ENV production
-WORKDIR /usr/src/app
-CMD ["npm","start"]
+# [sebastianseilund] Disabled these since we do something similar below
+# ENV NODE_ENV production
+# WORKDIR /usr/src/app
+# CMD ["npm","start"]
 
 RUN apt-get update \
  && apt-get upgrade -y --force-yes \
@@ -70,12 +71,13 @@ RUN buildDeps='curl gcc libc6-dev libpcre3-dev libssl-dev make' \
 # Add files, expose and run
 ################################################################################
 
-RUN mkdir -p /srv/marathon-service-router
-WORKDIR /srv/marathon-service-router
+RUN mkdir -p /app
+WORKDIR /app
 
-COPY package.json /srv/marathon-service-router/
-RUN npm install --production
-COPY . /srv/marathon-service-router
+COPY package.json /app/
+RUN npm install
+COPY . /app
+RUN npm run build
 
 COPY templates/haproxy.cfg.hbs /haproxy.cfg.hbs
 COPY templates/initial.cfg /etc/haproxy.cfg
@@ -85,4 +87,4 @@ EXPOSE 80
 ENV HAPROXY_TEMPLATE_PATH="/haproxy.cfg.hbs"
 ENV HAPROXY_CONFIG_PATH="/etc/haproxy.cfg"
 
-CMD ["/srv/marathon-service-router/run.sh"]
+CMD ["/app/run.sh"]

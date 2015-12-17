@@ -1,18 +1,18 @@
 import fs from 'fs'
 import childProcess from 'child_process'
 import promisify from 'es6-promisify'
+import config from './config'
 
 let writeFile = promisify(fs.writeFile)
 let readFile = promisify(fs.readFile)
 let exec = promisify(childProcess.exec)
 
-const HAPROXY_CONFIG_PATH = process.env.HAPROXY_CONFIG_PATH || './haproxy.cfg'
-
-export default async function(config) {
-    //TODO: Only reload haproxy if the file actually changed
+export default async function(contents) {
     try {
-        let current = await readFile(HAPROXY_CONFIG_PATH)
-        if (current == config) {
+        let current = await readFile(config.HAPROXY_CONFIG_PATH)
+        current = current.toString()
+        if (current == contents) {
+            console.log('No changes to haproxy.cfg')
             return
         }
     } catch (e) {
@@ -22,13 +22,15 @@ export default async function(config) {
         }
     }
 
-    console.log('Reloading HAProxy config...')
+    console.log('Reloading HAProxy...')
 
-    await writeFile(HAPROXY_CONFIG_PATH, config)
+    await writeFile(config.HAPROXY_CONFIG_PATH, contents)
 
-    let command = 'haproxy -f ' + HAPROXY_CONFIG_PATH + ' -p /var/run/haproxy.pid -sf $(cat /var/run/haproxy.pid)'
+    let command = 'haproxy -f ' + config.HAPROXY_CONFIG_PATH + ' -p /var/run/haproxy.pid -sf $(cat /var/run/haproxy.pid)'
     let options = {}
-    await exec(command, options)
+    if (!process.env.NO_HAPROXY_RELOAD) {
+        await exec(command, options)
+    }
 
-    console.log('Reloaded')
+    console.log('HAProxy reloaded')
 }

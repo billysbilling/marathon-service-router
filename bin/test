@@ -1,0 +1,16 @@
+#!/bin/sh
+
+export NODE_ENV="test"
+export HAPROXY_TEMPLATE_PATH="./test/fixtures/haproxy.cfg.hbs"
+export HAPROXY_CONFIG_PATH="tmp/haproxy.cfg"
+
+mkdir -p tmp
+rm -f tmp/haproxy.cfg
+
+node_modules/babel-cli/bin/babel.js src --out-dir lib --source-maps inline
+
+mocha \
+    --compilers js:babel-register \
+    --require test/bootstrap.js \
+    --recursive \
+    test

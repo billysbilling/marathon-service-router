@@ -2,3 +2,4 @@
 /node_modules
 /haproxy.cfg
 /lib
+/tmp

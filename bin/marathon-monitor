@@ -3,8 +3,9 @@
 require('babel-polyfill')
 
 var main = require('../lib/main').default
+var log = require('../lib/logger').log
 
-console.log('Marathon monitor started')
+log('Marathon monitor starting...')
 
 main()
 

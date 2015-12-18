@@ -1,9 +1,8 @@
-import {join} from 'path'
 import {readFileSync} from 'fs'
-import Handlebars from 'handlebars'
 import config from './config'
+import compileTemplate from './compile-template'
 
 let source = readFileSync(config.HAPROXY_TEMPLATE_PATH).toString()
-let template = Handlebars.compile(source)
+let template = compileTemplate(source)
 
 export default template

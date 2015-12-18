@@ -1,35 +1,5 @@
-global
-  daemon
-  maxconn 15000
-  spread-checks 5
-  log 127.0.0.1 local0 info
+{{>defaults}}
 
-defaults
-  log global
-  mode http
-  balance roundrobin
-  option abortonclose
-  option redispatch
-  timeout connect 5000ms
-  timeout client 60000ms
-  timeout server 60000ms
+{{>service-frontends}}
 
-
-# TCP frontends for all services
-
-{{#each services}}
-frontend {{serviceId}}-incoming
-  bind *:{{servicePort}}
-  mode tcp
-  use_backend {{serviceId}}
-
-{{/each}}
-
-# Backends for all services
-
-{{#each services}}
-backend {{serviceId}}
-  balance roundrobin{{#each tasks}}
-  server {{taskId}} {{host}}:{{port}}{{/each}}
-
-{{/each}}
+{{>service-backends}}

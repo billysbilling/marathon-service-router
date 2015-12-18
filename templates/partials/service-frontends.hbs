@@ -1,0 +1,9 @@
+# TCP frontends for all services
+
+{{#each services}}
+frontend {{serviceId}}-incoming
+  bind *:{{servicePort}}
+  mode tcp
+  use_backend {{serviceId}}
+
+{{/each}}

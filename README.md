@@ -4,8 +4,6 @@ A Marathon app that can be run by Marathon and route to other Marathon apps usin
 
 TODO:
 
-- Should handle Marathon failures
-- Hbs partials
 - Readme:
     - Official image
     - Own image

@@ -3,3 +3,7 @@ export function log(message) {
         console.log(new Date().toISOString() + ': ' + message)
     }
 }
+
+export function logError(e) {
+    log(e.stack || e.message)
+}

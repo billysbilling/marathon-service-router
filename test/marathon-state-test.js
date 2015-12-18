@@ -202,4 +202,23 @@ describe('marathon-state', () => {
             expect(tasks.length).equal(0)
         })
     })
+
+    describe('when Marathon fails', () => {
+        before(async () => {
+            appsReq = nock('http://master.mesos:8080')
+                .get('/v2/apps')
+                .reply(500)
+
+            subject = null
+            try {
+                await marathonState()
+            } catch (e) {
+                subject = e
+            }
+        })
+
+        it('throws an error', () => {
+            expect(subject.code).equal('MARATHON_ERROR')
+        })
+    })
 })

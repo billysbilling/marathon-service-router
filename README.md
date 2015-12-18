@@ -4,11 +4,15 @@ A Marathon app that can be run by Marathon and route to other Marathon apps usin
 
 TODO:
 
-- Respect health checks
+- Should handle Marathon failures
+- Hbs partials
+- Readme:
+    - Official image
+    - Own image
+    - Official image with mounted template
 - Does Marathon use paging?
 - Add tests of marathon-monitor
 - Add examples folder with an API gateway example
-- Tests of src/
 - Finish readme
 
 

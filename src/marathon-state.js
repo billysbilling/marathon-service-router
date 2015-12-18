@@ -28,13 +28,29 @@ export default async function() {
         let appId = formatAppId(app.id)
         app.ports.forEach((servicePort, portIndex) => {
             let serviceId = appId + (app.ports.length > 1 ? '-' + servicePort : '')
-            let tasks = (tasksPerApp[appId] || []).map(task => {
-                return {
-                    taskId: task.id,
-                    host: task.host,
-                    port: task.ports[portIndex]
-                }
-            })
+            let tasks = (tasksPerApp[appId] || [])
+                .filter(task => {
+                    //Include the task if the app does not have any health checks
+                    if (!app.healthChecks) {
+                        return true
+                    }
+
+                    //Exclude the task if the task does not have any healthCheckResults (it probably just started and is wihin its `gracePeriodSeconds`)
+                    if (!task.healthCheckResults) {
+                        return false
+                    }
+
+                    //Include the task if all health checks are passing
+                    return task.healthCheckResults.every(check => check.alive)
+                })
+                .map(task => {
+                    return {
+                        taskId: task.id,
+                        host: task.host,
+                        port: task.ports[portIndex]
+                    }
+                })
+
             services.push({
                 serviceId,
                 appId,

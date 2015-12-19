@@ -31,7 +31,7 @@ export default async function() {
             let tasks = (tasksPerApp[appId] || [])
                 .filter(task => {
                     //Include the task if the app does not have any health checks
-                    if (!app.healthChecks) {
+                    if (!app.healthChecks || app.healthChecks.length === 0) {
                         return true
                     }
 

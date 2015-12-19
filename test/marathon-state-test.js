@@ -17,7 +17,8 @@ describe('marathon-state', () => {
                             id: '/invoices-api',
                             ports: [
                                 50501
-                            ]
+                            ],
+                            healthChecks: []
                         },
                         {
                             id: '/contacts-api',

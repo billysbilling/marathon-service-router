@@ -4,7 +4,6 @@ A Marathon app that can be run by Marathon and route to other Marathon apps usin
 
 TODO:
 
-- Listen to health_status_changed_event events, too? Check other relevant events.
 - Cleanup Dockerfile
     - Check https://github.com/phusion/baseimage-docker
     - Make sure Marathon runs as a proper service, and that the whole container fails if Marathon stops working

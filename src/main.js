@@ -11,7 +11,7 @@ export {deps}
 
 export default class Main {
     async start() {
-        log('Marathon monitor starting...')
+        log('Starting...')
 
         let queue = new Queue(1, 2)
         let enqueue = () => {
@@ -35,7 +35,7 @@ export default class Main {
         //Sync right away
         enqueue()
 
-        log('Marathon monitor started')
+        log('Started')
     }
 
     stop() {

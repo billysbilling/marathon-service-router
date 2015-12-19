@@ -17,7 +17,6 @@ export default async function(contents) {
         let current = await readFile(config.HAPROXY_CONFIG_PATH)
         current = current.toString()
         if (current == contents) {
-            log('No changes to haproxy.cfg')
             return
         }
     } catch (e) {

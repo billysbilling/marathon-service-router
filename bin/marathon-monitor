@@ -2,12 +2,10 @@
 
 require('babel-polyfill')
 
-var main = require('../lib/main').default
-var log = require('../lib/logger').log
+var Main = require('../lib/main').default
 
-log('Marathon monitor starting...')
-
-main()
+var m = new Main()
+m.start()
 
 process.on('unhandledRejection', function(e) {
     console.error('Unhandled rejection:')

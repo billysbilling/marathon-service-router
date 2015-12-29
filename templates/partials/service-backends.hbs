@@ -2,6 +2,7 @@
 
 {{#each services}}
 backend {{serviceId}}
+  mode tcp
   balance roundrobin{{#each tasks}}
   server {{taskId}} {{host}}:{{port}}{{/each}}
 

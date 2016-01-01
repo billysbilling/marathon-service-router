@@ -9,7 +9,6 @@ readdirSync(partialsDir).forEach(file => {
         return
     }
     let contents = readFileSync(join(partialsDir, file)).toString()
-    console.log(match[1])
     Handlebars.registerPartial(match[1], contents)
 })
 

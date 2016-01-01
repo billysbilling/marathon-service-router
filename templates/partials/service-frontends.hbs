@@ -4,6 +4,6 @@
 frontend {{serviceId}}-incoming
   bind *:{{servicePort}}
   mode tcp
-  use_backend {{serviceId}}
+  use_backend {{serviceId}}-tcp
 
 {{/each}}

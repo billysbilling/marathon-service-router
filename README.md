@@ -2,11 +2,12 @@
 
 A Marathon app that can be run by Marathon and route to other Marathon apps using HAProxy.
 
+**This is still alpha software.**
+
 TODO:
 
-- Cleanup Dockerfile
-    - Check https://github.com/phusion/baseimage-docker
-    - Make sure Marathon runs as a proper service, and that the whole container fails if Marathon stops working
+- Add a health check endpoint
+- What happens if HAProxy dies? Does the container die, or should the health check guard against that?
 - Add examples folder with an API gateway example
 - Finish readme
 

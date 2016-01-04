@@ -10,6 +10,9 @@ defaults
   balance roundrobin
   option abortonclose
   option redispatch
+  option forwardfor
+  option httpchk HEAD / HTTP/1.1\r\nHost:localhost
+  option httpclose
   timeout connect 5000ms
   timeout client 60000ms
   timeout server 60000ms

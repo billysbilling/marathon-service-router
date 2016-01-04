@@ -3,12 +3,13 @@
 require('babel-polyfill')
 
 var Main = require('../lib/main').default
+var log = require('../lib/logger').log
 
 var m = new Main()
 m.start()
 
 process.on('unhandledRejection', function(e) {
-    console.error('Unhandled rejection:')
-    console.error(e.stack || e.message)
+    log('Unhandled rejection:')
+    log(e.stack || e.message || JSON.stringify(e))
     process.exit(1)
 })

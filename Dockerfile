@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM phusion/baseimage:0.9.18
 
 ################################################################################
 # Install Node.js. Taken from https://github.com/nodesource/docker-node/blob/master/ubuntu/trusty/node/5.0.0/Dockerfile
@@ -36,14 +36,14 @@ RUN apt-get update \
 
 
 ################################################################################
-# Install HAProxy. Taken from https://github.com/docker-library/haproxy/blob/ba0dc92fc368edb8e1f4928662316435fe782348/1.5/Dockerfile
+# Install HAProxy. Taken from https://github.com/docker-library/haproxy/blob/7998146d9fb15e16c0550d978064e82619bf7702/1.6/Dockerfile
 ################################################################################
 
 RUN apt-get update && apt-get install -y libssl1.0.0 libpcre3 --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
-ENV HAPROXY_MAJOR 1.5
-ENV HAPROXY_VERSION 1.5.14
-ENV HAPROXY_MD5 ad9d7262b96ba85a0f8c6acc6cb9edde
+ENV HAPROXY_MAJOR 1.6
+ENV HAPROXY_VERSION 1.6.3
+ENV HAPROXY_MD5 3362d1e268c78155c2474cb73e7f03f9
 
 # see http://sources.debian.net/src/haproxy/1.5.8-1/debian/rules/ for some helpful navigation of the possible "make" arguments
 RUN buildDeps='curl gcc libc6-dev libpcre3-dev libssl-dev make' \
@@ -79,12 +79,7 @@ RUN npm install
 COPY . /app
 RUN npm run build
 
-COPY templates/haproxy.cfg.hbs /haproxy.cfg.hbs
-COPY templates/initial.cfg /etc/haproxy.cfg
-
-EXPOSE 80
+RUN docker/configure.sh
 
 ENV HAPROXY_TEMPLATE_PATH="/haproxy.cfg.hbs"
 ENV HAPROXY_CONFIG_PATH="/etc/haproxy.cfg"
-
-CMD ["/app/run.sh"]

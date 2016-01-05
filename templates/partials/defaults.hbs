@@ -2,7 +2,6 @@ global
   daemon
   maxconn 15000
   spread-checks 5
-  log 127.0.0.1 local0 info
 
 defaults
   log global
@@ -11,8 +10,6 @@ defaults
   option abortonclose
   option redispatch
   option forwardfor
-  option httpchk HEAD / HTTP/1.1\r\nHost:localhost
-  option httpclose
   timeout connect 5000ms
   timeout client 60000ms
   timeout server 60000ms

@@ -30,8 +30,14 @@ export default async function(contents) {
 
     await writeFile(config.HAPROXY_CONFIG_PATH, contents)
 
-    let command = 'haproxy -f ' + config.HAPROXY_CONFIG_PATH + ' -p /var/run/haproxy.pid -sf $(cat /var/run/haproxy.pid)'
+
     if (!process.env.NO_HAPROXY_RELOAD) {
+        let pid = await deps.exec('[ -f /var/run/haproxy.pid ] && echo "exists" || echo "no"')
+        let command = 'haproxy -f ' + config.HAPROXY_CONFIG_PATH + ' -p /var/run/haproxy.pid'
+        if (pid === 'exists') {
+            command += ' -sf $(cat /var/run/haproxy.pid)'
+        }
+        log('COMMAND: ' + command)
         await deps.exec(command)
     }
 

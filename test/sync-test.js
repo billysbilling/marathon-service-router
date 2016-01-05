@@ -7,7 +7,7 @@ describe('sync', () => {
     let subject
 
     let setup = () => {
-        stub(deps, 'marathonState').resolves({apps: []})
+        stub(deps, 'marathonState').resolves({services: []})
         stub(deps, 'template').returns('haproxy fun')
         stub(deps, 'reloadHaproxy').resolves()
     }
@@ -32,7 +32,9 @@ describe('sync', () => {
 
         it('called template', async () => {
             expect(deps.template).calledOnce
-            expect(deps.template).calledWith({apps: []})
+            let data = deps.template.firstCall.args[0]
+            expect(data.services).deep.equal([])
+            expect(data.env.NODE_ENV).equal('test')
         })
 
         it('called reloadHaproxy', async () => {

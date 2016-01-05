@@ -23,6 +23,7 @@ export default async function() {
         throw e
     }
 
+    state.env = process.env
     let config = deps.template(state)
 
     await deps.reloadHaproxy(config)

@@ -12,4 +12,12 @@ readdirSync(partialsDir).forEach(file => {
     Handlebars.registerPartial(match[1], contents)
 })
 
+Handlebars.registerHelper('eq', (a, b) => {
+    return a == b
+})
+
+Handlebars.registerHelper('neq', (a, b) => {
+    return a != b
+})
+
 export default Handlebars.compile

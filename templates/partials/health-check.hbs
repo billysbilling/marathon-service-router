@@ -1,0 +1,8 @@
+{{#if env.HEALTH_CHECK_HAPROXY_PORT}}
+# Health check
+
+listen health-check
+  bind *:{{env.HEALTH_CHECK_HAPROXY_PORT}}
+  mode http
+  server node-health-check 127.0.0.1:{{env.HEALTH_CHECK_NODE_PORT}}
+{{/if}}

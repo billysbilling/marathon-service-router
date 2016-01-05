@@ -2,6 +2,7 @@ import Queue from 'promise-queue'
 import sync from './sync'
 import MarathonEventBus from './marathon-event-bus'
 import {log} from './logger'
+import {start as startHealthCheck} from './health-check-server'
 
 let deps = {
     sync,
@@ -12,6 +13,9 @@ export {deps}
 export default class Main {
     async start() {
         log('Starting...')
+        log(JSON.stringify(process.env, null, '  '))
+
+        await startHealthCheck()
 
         let queue = new Queue(1, 2)
         let enqueue = () => {

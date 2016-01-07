@@ -22,7 +22,10 @@ export async function streamEvents() {
         }
         s.onerror = function(e) {
             if (!connected) {
-                reject(e)
+                let e2 = new Error(`Marathon event stream error ${e.status}: ` + JSON.stringify(e, null, '  '))
+                e2.code = 'MARATHON_ERROR'
+                e2.status = e.status
+                reject(e2)
             }
         }
     })

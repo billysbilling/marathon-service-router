@@ -12,6 +12,7 @@
     "es6-promisify": "^3.0.0",
     "eventsource": "^0.1.6",
     "handlebars": "^4.0.2",
+    "lodash": "^4.17.4",
     "promise-queue": "^2.2.0",
     "request-promise": "^1.0.2"
   },

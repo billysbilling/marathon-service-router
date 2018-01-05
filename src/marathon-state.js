@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import {getApps, getTasks} from './marathon'
 import {log} from './logger'
 
@@ -26,8 +27,14 @@ export default async function() {
     let services = []
     appsPayload.forEach(app => {
         let appId = formatAppId(app.id)
-        app.ports.forEach((servicePort, portIndex) => {
-            let serviceId = appId + (app.ports.length > 1 ? '-' + servicePort : '')
+        const ports = app.ports ||
+            _.chain(app)
+                .get('container.portMappings')
+                .flatMap('servicePort')
+                .value() || []
+
+        return ports.forEach((servicePort, portIndex) => {
+            let serviceId = appId + (ports.length > 1 ? '-' + servicePort : '')
             let tasks = (tasksPerApp[appId] || [])
                 .filter(task => {
                     //Include the task if the app does not have any health checks
@@ -49,6 +56,9 @@ export default async function() {
                         host: task.host,
                         port: task.ports[portIndex]
                     }
+                })
+                .sort((a, b) => {
+                    a.taskId.localeCompare(b.taskId)
                 })
 
             services.push({

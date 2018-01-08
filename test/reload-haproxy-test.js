@@ -12,8 +12,8 @@ let unlink = promisify(fs.unlink)
 describe('reload-haproxy', () => {
     let subject
 
-    let setup = () => {
-        stub(deps, 'exec').resolves()
+    let setup = (result) => {
+        stub(deps, 'exec').resolves(result)
     }
 
     let cleanup = async () => {
@@ -31,7 +31,7 @@ describe('reload-haproxy', () => {
 
     describe('when haproxy.cfg does not exist', () => {
         before(async () => {
-            setup()
+            setup(['no exists\n'])
             await reloadHaproxy('haproxy fun')
         })
 
@@ -42,14 +42,15 @@ describe('reload-haproxy', () => {
         })
 
         it('reloaded haproxy', async () => {
-            expect(deps.exec).calledOnce
-            expect(deps.exec).calledWith('haproxy -f tmp/haproxy.cfg -p /var/run/haproxy.pid -sf $(cat /var/run/haproxy.pid)')
+            expect(deps.exec).calledTwice
+            expect(deps.exec).calledWith('[ -f /var/run/haproxy.pid ] && echo "exists" || echo "no"')
+            expect(deps.exec).calledWith('haproxy -f tmp/haproxy.cfg -p /var/run/haproxy.pid')
         })
     })
 
     describe('when haproxy.cfg exist and content changed', () => {
         before(async () => {
-            setup()
+            setup(['exists\n'])
             writeCfg('haproxy old fun')
             await reloadHaproxy('haproxy fun')
         })
@@ -61,14 +62,15 @@ describe('reload-haproxy', () => {
         })
 
         it('reloaded haproxy', async () => {
-            expect(deps.exec).calledOnce
+            expect(deps.exec).calledTwice
+            expect(deps.exec).calledWith('[ -f /var/run/haproxy.pid ] && echo "exists" || echo "no"')
             expect(deps.exec).calledWith('haproxy -f tmp/haproxy.cfg -p /var/run/haproxy.pid -sf $(cat /var/run/haproxy.pid)')
         })
     })
 
     describe('when haproxy.cfg exist and content is the same', () => {
         before(async () => {
-            setup()
+            setup(['exists\n'])
             writeCfg('haproxy fun')
             await reloadHaproxy('haproxy fun')
         })

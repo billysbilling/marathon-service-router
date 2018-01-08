@@ -9,7 +9,7 @@ rm -f tmp/haproxy.cfg
 
 node_modules/babel-cli/bin/babel.js src --out-dir lib --source-maps inline
 
-mocha \
+node_modules/.bin/mocha \
     --compilers js:babel-register \
     --require test/bootstrap.js \
     --recursive \

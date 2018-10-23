@@ -87,6 +87,5 @@ export default async function() {
 }
 
 function formatAppId(id) {
-    id = id.replace(/^\//, '')
-    return id
+    return id.replace(/^.*\//, '')
 }

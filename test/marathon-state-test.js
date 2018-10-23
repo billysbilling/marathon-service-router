@@ -26,6 +26,12 @@ describe('marathon-state', () => {
                                 50502,
                                 50503
                             ]
+                        },
+                        {
+                            id: '/resource/invoices-resource',
+                            ports: [
+                                50520
+                            ]
                         }
                     ]
                 })
@@ -36,21 +42,27 @@ describe('marathon-state', () => {
                     tasks: [
                         {
                             id: 't1',
-                            appId: 'invoices-api',
+                            appId: '/invoices-api',
                             host: '1.1.1.1',
                             ports: [1001]
                         },
                         {
                             id: 't2',
-                            appId: 'invoices-api',
+                            appId: '/invoices-api',
                             host: '1.1.1.2',
                             ports: [1002]
                         },
                         {
                             id: 't3',
-                            appId: 'contacts-api',
+                            appId: '/contacts-api',
                             host: '1.1.1.1',
                             ports: [1003, 1004]
+                        },
+                        {
+                            id: 't4',
+                            appId: '/resource/invoices-resource',
+                            host: '1.1.1.1',
+                            ports: [10000]
                         }
                     ]
                 })
@@ -101,7 +113,20 @@ describe('marathon-state', () => {
                                 port: 1002
                             }
                         ]
+                    },
+                    {
+                        serviceId: 'invoices-resource',
+                        appId: 'invoices-resource',
+                        servicePort: 50520,
+                        tasks: [
+                            {
+                                taskId: 't4',
+                                host: '1.1.1.1',
+                                port: 10000
+                            }
+                        ]
                     }
+
                 ]
             })
         })

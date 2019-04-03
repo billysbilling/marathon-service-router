@@ -1,7 +1,7 @@
 import Queue from 'promise-queue'
 import sync from './sync'
 import MarathonEventBus from './marathon-event-bus'
-import {log} from './logger'
+import logger from './logger'
 
 let deps = {
     sync,
@@ -11,7 +11,7 @@ export {deps}
 
 export default class Main {
     async start() {
-        log('Starting...')
+        logger.debug('Starting...')
 
         let queue = new Queue(1, 2)
         let enqueue = () => {
@@ -35,7 +35,7 @@ export default class Main {
         //Sync right away
         enqueue()
 
-        log('Started')
+        logger.debug('Started')
     }
 
     stop() {

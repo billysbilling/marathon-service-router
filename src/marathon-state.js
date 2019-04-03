@@ -1,18 +1,13 @@
 import _ from 'lodash'
 import {getApps, getTasks} from './marathon'
-import {log} from './logger'
+import logger from './logger'
 
 export default async function() {
-    log('Fetching state...')
+    logger.debug('Fetching state from marathon')
 
-    //TODO: Does Marathon use paging?
-    let appsPayload = await getApps()
-    // console.log(JSON.stringify(appsPayload, null, '  '))
-
-    //TODO: Does Marathon use paging?
-    let tasksPayload = await getTasks()
-    // console.log(JSON.stringify(tasksPayload, null, '  '))
-
+    let appsPayload = await getApps() //TODO: Does Marathon use paging?
+    let tasksPayload = await getTasks() //TODO: Does Marathon use paging?
+    let services = []
     let tasksPerApp = tasksPayload.reduce((memo, task) => {
         let appId = formatAppId(task.appId)
 
@@ -24,7 +19,6 @@ export default async function() {
         return memo
     }, {})
 
-    let services = []
     appsPayload.forEach(app => {
         let appId = formatAppId(app.id)
         const ports = app.ports ||
@@ -80,8 +74,7 @@ export default async function() {
         services
     }
 
-    log('State fetched')
-    // console.log(JSON.stringify(state, null, '  '))
+    logger.debug('Updated marathon state', { services: JSON.stringify(services) })
 
     return state
 }

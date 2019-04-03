@@ -1,15 +1,20 @@
 import requestp from 'request-promise'
 import EventSource from 'eventsource'
 import config from './config'
+import logger from './logger'
 
 export async function getApps() {
-    let {apps} = await request('GET', `/v2/apps`)
-    return apps
+    let response = await request('GET', `/v2/apps`)
+    logger.trace(response)
+
+    return response.apps
 }
 
 export async function getTasks() {
-    let {tasks} = await request('GET', `/v2/tasks`)
-    return tasks
+    let response = await request('GET', `/v2/tasks`)
+    logger.trace(response)
+
+    return response.tasks
 }
 
 export async function streamEvents() {

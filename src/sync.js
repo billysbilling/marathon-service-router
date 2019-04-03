@@ -1,7 +1,7 @@
 import marathonState from './marathon-state'
 import template from './template'
 import reloadHaproxy from './reload-haproxy'
-import {logError} from './logger'
+import logger from './logger'
 
 let deps = {
     marathonState,
@@ -17,7 +17,7 @@ export default async function() {
     } catch (e) {
         if (e.code === 'MARATHON_ERROR') {
             //If we got an error from the Marathon API we log it and continue (no crashing because of this)
-            logError(e)
+            logger.error({ type: 'error', error: e }, `${e.name}: ${e.message}`)
             return
         }
         throw e

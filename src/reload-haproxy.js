@@ -2,7 +2,7 @@ import fs from 'fs'
 import childProcess from 'child_process'
 import promisify from 'es6-promisify'
 import config from './config'
-import {log} from './logger'
+import logger from './logger'
 
 let writeFile = promisify(fs.writeFile)
 let readFile = promisify(fs.readFile)
@@ -26,19 +26,25 @@ export default async function(contents) {
         }
     }
 
-    log('Reloading HAProxy...')
+    logger.info(
+        { type: 'x-haproxy-config-file-update', data: contents },
+        'Updating haproxy configuration file...'
+    )
 
     await writeFile(config.HAPROXY_CONFIG_PATH, contents)
 
+    logger.info({ type: 'x-haproxy-reloading' }, 'Reloading haproxy...')
 
     if (!process.env.NO_HAPROXY_RELOAD) {
         let [pid] = await deps.exec('[ -f /var/run/haproxy.pid ] && echo "exists" || echo "no"')
         let command = 'haproxy -f ' + config.HAPROXY_CONFIG_PATH + ' -p /var/run/haproxy.pid'
-        if (pid === 'exists\n') {
+
+        if (pid.trim() === 'exists') {
             command += ' -sf $(cat /var/run/haproxy.pid)'
         }
+
         await deps.exec(command)
     }
 
-    log('HAProxy reloaded')
+    logger.info({ type: 'x-haproxy-reloaded' }, 'haproxy reloaded')
 }

@@ -1,9 +1,7 @@
-export function log(message) {
-    if (process.env.NODE_ENV !== 'test') {
-        console.log('[' + new Date().toISOString() + '] ' + message)
-    }
-}
+var bunyan = require('bunyan')
 
-export function logError(e) {
-    log(e.stack || e.message)
-}
+export default bunyan.createLogger({
+  name: process.env.SERVICE_NAME || 'marathon-service-router',
+  service: process.env.SERVICE_NAME || 'marathon-service-router',
+  level: process.env.LOG_LEVEL || 'INFO'
+})

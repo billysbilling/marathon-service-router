@@ -9,6 +9,7 @@
   "author": "Sebastian Seilund <sebsei@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "bunyan": "^1.8.12",
     "es6-promisify": "^3.0.0",
     "eventsource": "^0.1.6",
     "handlebars": "^4.0.2",

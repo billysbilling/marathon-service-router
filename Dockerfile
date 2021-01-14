@@ -1,4 +1,4 @@
-FROM haproxy:1.6.3
+FROM haproxy:2.3.4
 
 RUN apt-get update \
     && apt-get install curl -y \

@@ -1,4 +1,4 @@
-import requestp from 'request-promise'
+import got from 'got'
 import EventSource from 'eventsource'
 import config from './config'
 import logger from './logger'
@@ -7,14 +7,14 @@ export async function getApps() {
     let response = await request('GET', `/v2/apps`)
     logger.trace(response)
 
-    return response.apps
+    return response.body.apps
 }
 
 export async function getTasks() {
     let response = await request('GET', `/v2/tasks`)
     logger.trace(response)
 
-    return response.tasks
+    return response.body.tasks
 }
 
 export async function streamEvents() {
@@ -36,12 +36,12 @@ export async function streamEvents() {
     })
 }
 
-export async function request(method, url, {payload}={}) {
+export async function request(method, url) {
     try {
-        return await requestp({
+        return await got({
                 method,
                 url: config.MARATHON_HOST + url,
-                json: payload || true
+                responseType: 'json'
             })
     } catch (e) {
         let e2 = new Error(`Marathon error ${e.statusCode}: ` + JSON.stringify(e.response && e.response.body, null, '  '))

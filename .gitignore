@@ -3,3 +3,4 @@
 /haproxy.cfg
 /lib
 /tmp
+.env

@@ -12,3 +12,8 @@ defaults
   timeout connect 5000ms
   timeout client 60000ms
   timeout server 60000ms
+
+frontend health-check
+   mode http
+   bind *:80
+   monitor-uri   /health

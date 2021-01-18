@@ -1,20 +1,16 @@
 import fs from 'fs'
-import childProcess from 'child_process'
-import promisify from 'es6-promisify'
+import util from 'util'
 import config from './config'
 import logger from './logger'
 
-let writeFile = promisify(fs.writeFile)
-let readFile = promisify(fs.readFile)
-
 let deps = {
-    exec: promisify(childProcess.exec)
+    exec: util.promisify(require('child_process').exec)
 }
 export {deps}
 
 export default async function(contents) {
     try {
-        let current = await readFile(config.HAPROXY_CONFIG_PATH)
+        let current = fs.readFileSync(config.HAPROXY_CONFIG_PATH)
         current = current.toString()
         if (current == contents) {
             return
@@ -31,15 +27,16 @@ export default async function(contents) {
         'Updating haproxy configuration file...'
     )
 
-    await writeFile(config.HAPROXY_CONFIG_PATH, contents)
+    fs.writeFileSync(config.HAPROXY_CONFIG_PATH, contents)
 
     logger.info({ type: 'x-haproxy-reloading' }, 'Reloading haproxy...')
 
     if (!process.env.NO_HAPROXY_RELOAD) {
-        let [pid] = await deps.exec('[ -f /var/run/haproxy.pid ] && echo "exists" || echo "no"')
+        let pidChild = await deps.exec('[ -f /var/run/haproxy.pid ] && echo "exists" || echo "no"')
+
         let command = 'haproxy -f ' + config.HAPROXY_CONFIG_PATH + ' -p /var/run/haproxy.pid'
 
-        if (pid.trim() === 'exists') {
+        if (pidChild.stdout.trim() === 'exists') {
             command += ' -sf $(cat /var/run/haproxy.pid)'
         }
 

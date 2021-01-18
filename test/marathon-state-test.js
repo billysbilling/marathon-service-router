@@ -1,6 +1,7 @@
 import {expect} from 'chai'
 import nock from 'nock'
 import marathonState from '../lib/marathon-state'
+import config from '../lib/config'
 
 describe('marathon-state', () => {
     let subject
@@ -9,7 +10,7 @@ describe('marathon-state', () => {
 
     describe('normal circumstances', () => {
         before(async () => {
-            appsReq = nock('http://master.mesos:8080')
+            appsReq = nock(config.MARATHON_HOST)
                 .get('/v2/apps')
                 .reply(200, {
                     apps: [
@@ -36,7 +37,7 @@ describe('marathon-state', () => {
                     ]
                 })
 
-            tasksReq = nock('http://master.mesos:8080')
+            tasksReq = nock(config.MARATHON_HOST)
                 .get('/v2/tasks')
                 .reply(200, {
                     tasks: [
@@ -134,7 +135,7 @@ describe('marathon-state', () => {
 
     describe('with health checks', () => {
         before(async () => {
-            appsReq = nock('http://master.mesos:8080')
+            appsReq = nock(config.MARATHON_HOST)
                 .get('/v2/apps')
                 .reply(200, {
                     apps: [
@@ -150,7 +151,7 @@ describe('marathon-state', () => {
                     ]
                 })
 
-            tasksReq = nock('http://master.mesos:8080')
+            tasksReq = nock(config.MARATHON_HOST)
                 .get('/v2/tasks')
                 .reply(200, {
                     tasks: [
@@ -191,7 +192,7 @@ describe('marathon-state', () => {
 
     describe('with health checks and app in grace period', () => {
         before(async () => {
-            appsReq = nock('http://master.mesos:8080')
+            appsReq = nock(config.MARATHON_HOST)
                 .get('/v2/apps')
                 .reply(200, {
                     apps: [
@@ -207,7 +208,7 @@ describe('marathon-state', () => {
                     ]
                 })
 
-            tasksReq = nock('http://master.mesos:8080')
+            tasksReq = nock(config.MARATHON_HOST)
                 .get('/v2/tasks')
                 .reply(200, {
                     tasks: [
@@ -231,7 +232,7 @@ describe('marathon-state', () => {
 
     describe('when Marathon fails', () => {
         before(async () => {
-            appsReq = nock('http://master.mesos:8080')
+            appsReq = nock(config.MARATHON_HOST)
                 .get('/v2/apps')
                 .reply(500)
 

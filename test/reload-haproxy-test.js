@@ -3,6 +3,7 @@ import {stub} from 'sinon'
 import fs from 'fs'
 import reloadHaproxy from '../lib/reload-haproxy'
 import {deps} from '../lib/reload-haproxy'
+import config from '../lib/config'
 
 describe('reload-haproxy', () => {
     let subject
@@ -12,16 +13,16 @@ describe('reload-haproxy', () => {
     }
 
     let cleanup = async () => {
-        fs.unlinkSync('tmp/haproxy.cfg')
+        fs.unlinkSync(config.HAPROXY_CONFIG_PATH)
         deps.exec.restore()
     }
 
     let readCfg = async () => {
-        return (fs.readFileSync('tmp/haproxy.cfg')).toString()
+        return (fs.readFileSync(config.HAPROXY_CONFIG_PATH)).toString()
     }
 
     let writeCfg = async (contents) => {
-        fs.writeFileSync('tmp/haproxy.cfg', contents)
+        fs.writeFileSync(config.HAPROXY_CONFIG_PATH, contents)
     }
 
     describe('when haproxy.cfg does not exist', () => {

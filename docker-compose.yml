@@ -6,3 +6,4 @@ services:
       - .env
     ports:
       - 8080:80
+    # command: /app/bin/test

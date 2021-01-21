@@ -12,7 +12,7 @@ describe('reload-haproxy', () => {
         stub(deps, 'exec').resolves(result)
     }
 
-    let cleanup = async () => {
+    let cleanup = () => {
         fs.unlinkSync(config.HAPROXY_CONFIG_PATH)
         deps.exec.restore()
     }

@@ -6,10 +6,31 @@ A Marathon app that can be run by Marathon and route to other Marathon apps usin
 
 TODO:
 
-- Add a health check endpoint
 - What happens if HAProxy dies? Does the container die, or should the health check guard against that?
 - Add examples folder with an API gateway example
 - Finish readme
+
+## Environment variables
+
+Name | Required | Default | Description
+---- | -------- | ------- | -----------
+`SERVICE_NAME` | `false` | `marathon-service-router` | Service name for logging
+`LOG_LEVEL` | `false` | `'INFO'` | Level at which log records will not be suppressed
+`MARATHON_HOST` | `false` | `'http://master.mesos:8080'` | Marathon URL
+`HAPROXY_TEMPLATE_PATH` | `false` | `'../templates/haproxy.cfg.hbs'` | Path to HAProxy configuration template
+`HAPROXY_CONFIG_PATH` | `false` | `'./haproxy.cfg'` | Path to HAProxy configuration
+`NO_HAPROXY_RELOAD` | `false` | | Supress reloading HAProxy on changes
+
+## Local development
+A running marathon cluster is required. Since this service only reads from the Marathon API it's safe to run against a real cluster.
+
+Copy env.example to .env for increased logging and to connect to the staging Marathon cluster:
+```cp env.example .env```
+
+Start the service using docker-compose:
+```docker-compose up --build```
+
+To run test, uncomment the `command`-line in docker-compose.yml and start the service as started above.
 
 
 ## Alternatives (service-router.py, marathon-haproxy-bridge)

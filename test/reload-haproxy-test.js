@@ -1,13 +1,9 @@
 import {expect} from 'chai'
 import {stub} from 'sinon'
 import fs from 'fs'
-import promisify from 'es6-promisify'
 import reloadHaproxy from '../lib/reload-haproxy'
 import {deps} from '../lib/reload-haproxy'
-
-let readFile = promisify(fs.readFile)
-let writeFile = promisify(fs.writeFile)
-let unlink = promisify(fs.unlink)
+import config from '../lib/config'
 
 describe('reload-haproxy', () => {
     let subject
@@ -16,22 +12,22 @@ describe('reload-haproxy', () => {
         stub(deps, 'exec').resolves(result)
     }
 
-    let cleanup = async () => {
-        await unlink('tmp/haproxy.cfg')
+    let cleanup = () => {
+        fs.unlinkSync(config.HAPROXY_CONFIG_PATH)
         deps.exec.restore()
     }
 
     let readCfg = async () => {
-        return (await readFile('tmp/haproxy.cfg')).toString()
+        return (fs.readFileSync(config.HAPROXY_CONFIG_PATH)).toString()
     }
 
     let writeCfg = async (contents) => {
-        await writeFile('tmp/haproxy.cfg', contents)
+        fs.writeFileSync(config.HAPROXY_CONFIG_PATH, contents)
     }
 
     describe('when haproxy.cfg does not exist', () => {
         before(async () => {
-            setup(['no exists\n'])
+            setup({ stdout: 'no\n', stderr: '' })
             await reloadHaproxy('haproxy fun')
         })
 
@@ -50,7 +46,7 @@ describe('reload-haproxy', () => {
 
     describe('when haproxy.cfg exist and content changed', () => {
         before(async () => {
-            setup(['exists\n'])
+            setup({ stdout: 'exists\n', stderr: '' })
             writeCfg('haproxy old fun')
             await reloadHaproxy('haproxy fun')
         })
@@ -70,7 +66,7 @@ describe('reload-haproxy', () => {
 
     describe('when haproxy.cfg exist and content is the same', () => {
         before(async () => {
-            setup(['exists\n'])
+            setup({ stdout: 'exists\n', stderr: '' })
             writeCfg('haproxy fun')
             await reloadHaproxy('haproxy fun')
         })

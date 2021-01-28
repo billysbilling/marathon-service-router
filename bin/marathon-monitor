@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+require('@billyfree/dd-trace')()
 
 require('babel-polyfill')
 

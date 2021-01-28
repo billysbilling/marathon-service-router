@@ -9,6 +9,7 @@
   "author": "Sebastian Seilund <sebsei@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@billyfree/dd-trace": "^1.0.1",
     "bunyan": "^1.8.12",
     "eventsource": "^0.1.6",
     "got": "^11.8.1",

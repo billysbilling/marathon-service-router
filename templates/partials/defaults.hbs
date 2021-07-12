@@ -17,3 +17,7 @@ frontend health-check
    mode http
    bind *:20001
    monitor-uri   /health
+
+backend billy-api-ecs
+  mode http
+  server host billy-api.ecs.staging.billy.dk:80
